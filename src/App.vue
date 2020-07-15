@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    跟组件<el-button type="primary">主要按钮</el-button>
+    <router-view></router-view>
   </div>
 </template>
 
