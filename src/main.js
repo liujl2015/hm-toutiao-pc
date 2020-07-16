@@ -6,7 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 // @ 是在vue-cli中生效的路径别名，
 // 具体含义是src目录的绝对路径
 import router from '@/router'
+import axios from 'axios'
 
+Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
