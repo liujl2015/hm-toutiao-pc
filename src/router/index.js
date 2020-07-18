@@ -8,6 +8,7 @@ import Login from '@/views/login'
 import Layout from '@/views/Layout'
 import Welcome from '@/views/welcome'
 import NotFound from '@/views/404.vue'
+import Article from '@/views/article'
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,6 +19,9 @@ const routes = [
             {
                 path: '/',
                 component: Welcome
+            },{
+                path:'/article',
+                component: Article
             }
         ]
     },
