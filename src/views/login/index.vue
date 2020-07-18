@@ -23,6 +23,8 @@
     </div>
 </template>
 <script>
+import auth from '@/utils/auth'
+
 export default {
     name: 'page-login',
     data(){
@@ -69,9 +71,11 @@ export default {
                     this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', 
                         this.loginForm).then(res=>{
                             // console.log(res.data)
+                            // 保存用户信息
+                           auth.setUser(res.data.data)
                             this.$router.push('/')
                         }).catch(e=>{
-                            // console.log('登录失败')
+                            console.log('登录失败')
                             this.$message.error('手机号或验证码错误')
                         })
                 }
