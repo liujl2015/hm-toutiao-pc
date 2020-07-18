@@ -57,15 +57,19 @@
                     <!-- 文字 -->
                     <span class="text">江苏传智博客科技有限公司</span>
                     <!-- 下拉菜单 -->
-                    <el-dropdown>
+                    <el-dropdown @command="clickItem">
                         <span>
-                           <img class="head" src="../assets/images/avatar.jpg" alt="">
-                           <span class="name">清风徐来</span>
+                           <img class="head" :src="user.photo" alt="">
+                           <span class="name">{{user.name}}</span>
                            <i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-s-tools">个人设置</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+                            <!-- 原因： click事件没触发，此时是组件，并未去支持click -->
+                            <!--想法 把click事件绑定在组件最终解析的dom标签上，dom标签肯定支持 -->
+                            <!-- 1）实现 不在事件后加上事件修饰符 .native 给组件根标签添加原生事件 -->
+                            <!-- @click.native="setting() @click.native="logout()" " -->
+                            <el-dropdown-item command="setting"  icon="el-icon-s-tools">个人设置</el-dropdown-item>
+                            <el-dropdown-item command="logout" icon="el-icon-unlock">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-header>
@@ -77,11 +81,35 @@
         </el-container>
 </template>
 <script>
+import auth from '@/utils/auth'
+
 export default {
     name: 'Layout',
     data(){
         return{
-            isOpen: true
+            isOpen: true,
+            // 用户名, 用户头像
+            user:{
+                name: '',
+                photo: ''
+            }
+        }
+    },
+    created(){
+            const {name, photo} = auth.getUser();
+            this.user = {name, photo}
+        },
+    methods: {
+        setting(){
+            this.$router.push('/setting')
+        },
+        logout(){
+            auth.delUser();
+            this.$router.push("/login")
+        },
+        // 注意，绑定该函数的时候不能戴括号，因为需要接受默认传参
+        clickItem(command){
+            this[command]()
         }
     }
 }
