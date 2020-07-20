@@ -40,11 +40,31 @@
         <el-card style="margin-top: 20px;">
             <div slot="header">根据筛选条件共查询到 0 条结果：</div>
             <el-table :data="articles">
-                <el-table-column label="封面" ></el-table-column>
+                <el-table-column label="封面" >
+                    <template slot-scope="scope"> 
+                        <!-- <img :src="scope.row.cover.images[0]"   > -->
+                        <el-image :src="scope.row.cover.images[0]" style="width:180px;height:120px;">
+                            <div slot="error" class="image-slot">
+                                <img src="../../assets/images/error.gif" alt="" style="width:180px;height:120px;" />
+                            </div>
+                        </el-image>
+                    </template>
+                </el-table-column>
                 <el-table-column label="标题" prop="title"></el-table-column>
-                <el-table-column label="状态" ></el-table-column>
+                <el-table-column label="状态" >
+                    <template slot-scope="scope"> 
+                        <el-tag v-if="scope.row.status === 0" type="info">草稿</el-tag>
+                        <el-tag v-if="scope.row.status === 1">待审核</el-tag>
+                        <el-tag v-if="scope.row.status === 2" type="success">审核通过</el-tag>
+                        <el-tag v-if="scope.row.status === 3"  type="warning">审核失败</el-tag>
+                        <el-tag v-if="scope.row.status === 4" type="danger">已删除</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="发布时间" prop="pubdate" ></el-table-column>
-                <el-table-column label="操作" ></el-table-column>
+                <el-table-column label="操作" >
+                    <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+                </el-table-column>
             </el-table>
             <el-pagination 
                 style="margin-top: 20px;"
