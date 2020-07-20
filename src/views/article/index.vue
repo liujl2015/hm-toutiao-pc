@@ -41,9 +41,9 @@
             <div slot="header">根据筛选条件共查询到 0 条结果：</div>
             <el-table :data="articles">
                 <el-table-column label="封面" ></el-table-column>
-                <el-table-column label="标题" ></el-table-column>
+                <el-table-column label="标题" prop="title"></el-table-column>
                 <el-table-column label="状态" ></el-table-column>
-                <el-table-column label="发布时间" ></el-table-column>
+                <el-table-column label="发布时间" prop="pubdate" ></el-table-column>
                 <el-table-column label="操作" ></el-table-column>
             </el-table>
             <el-pagination 
@@ -77,6 +77,10 @@ export default {
                 channel_id: null,
                 begin_pubdate: null,
                 end_pubdate: null,
+                //页码
+                page: 1,
+                // 页数
+                per_page: 20
             },
             dateArr: [],
             articles: [],
@@ -86,6 +90,7 @@ export default {
     },
     created(){
         this.getChannelOptions()
+        this.getArticles()
     },
     methods:{
         // 获取频道数据
@@ -93,6 +98,12 @@ export default {
             const res = await this.$http.get('channels')
             // console.log(res);
             this.channelOptions = res.data.data.channels
+        },
+        // 获取文章数据
+        async  getArticles(){
+            const res = await this.$http.get('articles',{ params: this.reqParams })
+            // console.log(res);
+            this.articles = res.data.data.results
         }
     }
 }
