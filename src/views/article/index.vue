@@ -17,13 +17,15 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="频道:">
-                    <el-select v-model="reqParams.channel_id" placeholder="请选择">
+                    <el-select @change="changeChannel" clearable v-model="reqParams.channel_id" placeholder="请选择">
                         <el-option v-for=" item in channelOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="日期:">
                       <el-date-picker
                             v-model="dateArr"
+                            @change="changeDate"
+                            value-format="yyyy-MM-dd"
                             type="daterange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -31,7 +33,7 @@
                         </el-date-picker>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary">筛选</el-button>
+                    <el-button @click="search" type="primary">筛选</el-button>
                 </el-form-item>
                 
             </el-form>
@@ -62,8 +64,10 @@
                 </el-table-column>
                 <el-table-column label="发布时间" prop="pubdate" ></el-table-column>
                 <el-table-column label="操作" >
-                    <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-                    <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+                    <template slot-scope="scope">
+                        <el-button type="primary" @click="toEdit(scope.row.id)" icon="el-icon-edit" circle plain></el-button>
+                        <el-button type="danger" @click="toDelete(scope.row.id)" icon="el-icon-delete" circle plain></el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <el-pagination 
@@ -133,6 +137,48 @@ export default {
         changePager(newPage){
             this.reqParams.page = newPage
             this.getArticles()
+        },
+        search(){
+            this.reqParams.page = 1;
+            this.getArticles()
+        },
+        changeDate(arr){
+            if(arr){
+                this.reqParams.begin_pubdate = arr[0]
+                this.reqParams.end_pubdate = arr[1]
+            } else {
+                this.reqParams.begin_pubdate = null
+                this.reqParams.end_pubdate = null
+            }
+        },
+        changeChannel(val){
+            if(val === '') this.reqParams.channel_id = null
+        },
+        toEdit(id){
+            this.$route.push({path: '/publish', query:{id}})
+        },
+        toDelete(id){
+            this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then( async () => {
+                try{
+                    await this.$http.delete(`articles/${id}`)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.getArticles()
+                }catch(e){
+                    this.$message({
+                        type: 'info',
+                        message: '删除失败'
+                    });  
+                }
+            }).catch(() => {
+                    
+            });
         }
     }
 }
