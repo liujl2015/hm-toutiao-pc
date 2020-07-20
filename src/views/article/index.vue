@@ -41,10 +41,10 @@
 
 </template>
 <script>
-import MyBread from '@/components/my-bread'
+// import MyBread from '@/components/my-bread'
 
 export default {
-    components: { MyBread:MyBread },
+    // components: { MyBread:MyBread },
     // 不要和原生标签名字重名 Vue会报错
     name: 'page-article',
     // created(){

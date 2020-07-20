@@ -8,8 +8,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 import axios from '@/api'
 
+// 导入自定义的插件
+import myPlugin from '@/plugin'
+
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
+
+// 全局组件注册，全局指令，全局过滤器
+Vue.use(myPlugin)
 
 Vue.use(ElementUI)
 
