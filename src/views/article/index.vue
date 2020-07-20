@@ -38,7 +38,7 @@
         </el-card>
         <!-- 搜索结果区域 -->
         <el-card style="margin-top: 20px;">
-            <div slot="header">根据筛选条件共查询到 0 条结果：</div>
+            <div slot="header">根据筛选条件共查询到 {{total}} 条结果：</div>
             <el-table :data="articles">
                 <el-table-column label="封面" >
                     <template slot-scope="scope"> 
@@ -70,7 +70,10 @@
                 style="margin-top: 20px;"
                 background
                 layout="prev, pager, next"
-                :total="1000">
+                @current-change="changePager"
+                :current-page="reqParams.page"
+                :page-size="reqParams.per_page"
+                :total="total">
             </el-pagination>
         </el-card>
     </div>
@@ -105,7 +108,8 @@ export default {
             dateArr: [],
             articles: [],
             // 频道选项
-            channelOptions: []
+            channelOptions: [],
+            total: 0,
         }
     },
     created(){
@@ -124,6 +128,11 @@ export default {
             const res = await this.$http.get('articles',{ params: this.reqParams })
             // console.log(res);
             this.articles = res.data.data.results
+            this.total = res.data.data.total_count
+        },
+        changePager(newPage){
+            this.reqParams.page = newPage
+            this.getArticles()
         }
     }
 }
