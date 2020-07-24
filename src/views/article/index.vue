@@ -17,9 +17,9 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="频道:">
-                    <el-select @change="changeChannel" clearable v-model="reqParams.channel_id" placeholder="请选择">
-                        <el-option v-for=" item in channelOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
+                    <!-- <my-channel :value="reqParams.channel_id" @input="reqParams.channel_id = $event"></my-channel> -->
+                    <my-channel  v-model="reqParams.channel_id" ></my-channel>
+                </el-form-item>
                 </el-form-item>
                 <el-form-item label="日期:">
                       <el-date-picker
@@ -117,16 +117,10 @@ export default {
         }
     },
     created(){
-        this.getChannelOptions()
+        // this.getChannelOptions()
         this.getArticles()
     },
-    methods:{
-        // 获取频道数据
-        async getChannelOptions(){
-            const res = await this.$http.get('channels')
-            // console.log(res);
-            this.channelOptions = res.data.data.channels
-        },
+    methods:{    
         // 获取文章数据
         async  getArticles(){
             const res = await this.$http.get('articles',{ params: this.reqParams })
@@ -151,11 +145,9 @@ export default {
                 this.reqParams.end_pubdate = null
             }
         },
-        changeChannel(val){
-            if(val === '') this.reqParams.channel_id = null
-        },
+        
         toEdit(id){
-            this.$route.push({path: '/publish', query:{id}})
+            this.$router.push({path: '/publish', query:{id}})
         },
         toDelete(id){
             this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {

@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 import axios from '@/api'
 
+// 导入自己的全局样式
+import '@/styles/index.less'
 // 导入自定义的插件
 import myPlugin from '@/plugin'
 
