@@ -2,7 +2,7 @@
     <div class="my-image">
         <!-- 图片按钮 -->
         <div class="btn-image" @click="openDialog()">
-            <img src="../assets/images/default.png" />
+            <img :src="value || previewImg"  alt />
         </div>
         <!-- 对话框 -->
         <el-dialog :visible.sync="dialogVisible" width="720px">
@@ -50,13 +50,14 @@
             </el-tabs>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="confirmImage()">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 <script>
 import auth from '@/utils/auth.js'
+import img from '../assets/images/default.png'
 export default {
     name: 'my-image',
     data(){
@@ -74,13 +75,23 @@ export default {
             uploadUrl: null,
             headers: {
                 Authorization: `Bearer ${auth.getUser().token}`
-            }
+            },
+            previewImg: img,
+        }
+    },
+    props: {
+        value: {
+            type: String
         }
     },
     methods:{
         openDialog(){
             this.dialogVisible = true;
             this.getImages()
+            // 清除选择及上传图片的记录
+            this.activeName = 'images'
+            this.uploadUrl = null
+            this.selectedImgUrl = null
         },
         async getImages(){
             const res = await this.$http.get('user/images', { params: this.reqParams})
@@ -100,6 +111,20 @@ export default {
         },
         uploadSuccess(response){
             this.uploadUrl = response.data.url
+        },
+        confirmImage(){
+            if(this.activeName === 'images'){
+                // 激活素材库
+                if(!this.selectedImgUrl) return this.$message.warning('请选择一张图片');
+                // this.previewImg = this.selectedImgUrl
+                this.$emit('input', this.selectedImgUrl)
+            } else {
+                // 激活上传图片
+                if(!this.uploadUrl) return this.$message.warning('请上传一张图片')
+                // this.previewImg = this.uploadUrl
+                this.$emit('input', this.uploadUrl)
+            }
+            this.dialogVisible = false;
         }
     }
 }

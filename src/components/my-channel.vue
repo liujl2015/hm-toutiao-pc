@@ -1,5 +1,5 @@
 <template>
-    <el-select @change="changeChannel" clearable v-model="value" placeholder="请选择">
+    <el-select @change="changeChannel" clearable :value="value" placeholder="请选择">
         <el-option v-for=" item in channelOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
     </el-select>
 </template>
