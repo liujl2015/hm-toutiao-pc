@@ -18,17 +18,20 @@
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
                         <el-button v-if="scope.row.comment_status" type="danger" @click="toToggleStatus(scope.row)" size="small"  >关闭评论</el-button>
-                        <el-button v-if="!scope.row.comment_status" type="success" @click="toToggleStatus(scope.row)" size="small" >打开评论</el-button>
+                        <!-- <el-button v-if="!scope.row.comment_status" type="success" @click="toToggleStatus(scope.row)" size="small" >打开评论</el-button> -->
+                        <el-button v-else type="success" @click="toToggleStatus(scope.row)" size="small" >打开评论</el-button>
                     </template>
                 </el-table-column>
              </el-table>
              <el-pagination 
                 style="margin-top: 20px;"
                 background
-                layout="prev, pager, next"
+                layout="prev, pager, next,sizes"
+                :page-sizes="[10, 20, 30, 40, 50]"
                 @current-change="changePager"
                 :current-page="reqParams.page"
                 :page-size="reqParams.per_page"
+                @size-change="handleSizeChange"
                 :total="total">
             </el-pagination>
         </el-card>
@@ -60,6 +63,12 @@ export default {
         changePager(newPage){
             this.reqParams.page = newPage;
             this.getArticles();
+        },
+        handleSizeChange(size){
+            this.reqParams.page = 1;
+            this.reqParams.per_page = size;
+            this.getArticles()
+
         },
         async toToggleStatus(article){
             
