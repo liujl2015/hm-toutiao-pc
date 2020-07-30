@@ -1,3 +1,9 @@
 module.exports = {
-  lintOnSave: false
+  lintOnSave: false,
+  configureWebpack:{
+    externals: {
+      echarts: 'echarts'
+    }
+  },
+  publicPath: './'
 }

@@ -125,6 +125,7 @@ export default {
                 this.$emit('input', this.uploadUrl)
             }
             this.dialogVisible = false;
+            this.$emit('confirm');
         }
     }
 }

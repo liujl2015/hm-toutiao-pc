@@ -83,7 +83,7 @@
 </template>
 <script>
 import auth from '@/utils/auth'
-
+import eventBus from '@/eventBus'
 export default {
     name: 'Layout',
     data(){
@@ -99,6 +99,13 @@ export default {
     created(){
             const {name, photo} = auth.getUser();
             this.user = {name, photo}
+            eventBus.$on('updateUserName', data =>{
+                this.user.name = data
+            })
+
+            eventBus.$on('updateUserPhoto', data =>{
+                this.user.photo = data
+            })
         },
     methods: {
         setting(){

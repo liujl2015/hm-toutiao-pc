@@ -3,17 +3,16 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import auth from '@/utils/auth'
 
-import Login from '@/views/login'
-
-import Layout from '@/views/Layout'
-import Welcome from '@/views/welcome'
-import NotFound from '@/views/404.vue'
-import Article from '@/views/article'
-import Image from '@/views/image'
-import Publish from '@/views/publish'
-import Comment from '@/views/comment'
-import Fans from '@/views/fans'
-import Setting from '@/views/setting'
+const Login = () => import('@/views/login')
+const Layout = () => import('@/views/Layout')
+const Welcome = () => import('@/views/welcome')
+const NotFound = () => import('@/views/404.vue')
+const Article = () => import('@/views/article')
+const Image = () => import('@/views/image')
+const Publish = () => import('@/views/publish')
+const Comment = () => import('@/views/comment')
+const Fans = () => import(/* webpackChunkName: "fans" */'@/views/fans')
+const Setting = () => import('@/views/setting')
 Vue.use(VueRouter)
 
 const routes = [
